@@ -10,7 +10,7 @@ import uni.csw.medibug.telemetry_context.telemetry_management.application.event.
 @Component
 @RequiredArgsConstructor
 @Slf4j
-public class TelemetryWebSocketProjector {
+public class TelemetryNotificationProjector {
     // projeccion destinada a websocket
     private final UserNotificationService notificationService;
 

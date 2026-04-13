@@ -18,7 +18,7 @@ import uni.csw.medibug.telemetry_context.telemetry_management.domain.payload.Met
 @Component
 @RequiredArgsConstructor
 @Slf4j
-public class TelemetryPersistenceProjector {
+public class TelemetryPersistenceAssertion {
     // proyector destinado para escuchar eventos y generar el guardado
     private final TimeSeriesBloodCountRepository bloodRepo;
     private final TimeSeriesElectrolyteRepository electrolyteRepo;
