@@ -1,5 +1,6 @@
 package uni.csw.medibug.telemetry_context.telemetry_management.infrastructure.configure.utils;
 
+import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 import org.springframework.http.server.ServerHttpRequest;
 import org.springframework.http.server.ServerHttpResponse;
@@ -14,10 +15,9 @@ import java.util.Map;
 public class UserHandshakeInterceptor implements HandshakeInterceptor {
     @Override
     public boolean beforeHandshake(ServerHttpRequest request,
-                                   ServerHttpResponse response,
-                                   WebSocketHandler wsHandler,
-                                   Map<String, Object> attributes) throws Exception {
-        // cuando el frontend conecte, esperamos que mande el ID asi: /ws?userId=123
+                                   @NonNull ServerHttpResponse response,
+                                   @NonNull WebSocketHandler wsHandler,
+                                   @NonNull Map<String, Object> attributes) {
 
         // Cuando el frontend conecte, esperamos que mande el ID así: /ws?userId=123
         String userId = UriComponentsBuilder.fromUri(request.getURI())
@@ -26,17 +26,18 @@ public class UserHandshakeInterceptor implements HandshakeInterceptor {
                 .getFirst("userId");
 
         if (userId != null) {
-            // ¡Le pegamos el DNI a la conexión!
+            // ponemos el dni
             attributes.put("userId", userId);
+            return true;
         }
 
-        return true; // true = permitir la conexión
+        return false; // no permitimos la conexión si no hay usuario de conexión
     }
 
     @Override
-    public void afterHandshake(ServerHttpRequest request,
-                               ServerHttpResponse response,
-                               WebSocketHandler wsHandler,
+    public void afterHandshake(@NonNull ServerHttpRequest request,
+                               @NonNull ServerHttpResponse response,
+                               @NonNull WebSocketHandler wsHandler,
                                @Nullable Exception exception) {
 
     }
