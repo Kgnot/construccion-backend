@@ -29,15 +29,15 @@ public class TelemetryPersistenceProjector {
     @EventListener
     public void onAccepted(TelemetryAcceptedEvent event) {
         try {
-            switch (event.telemetryType()) {
-                case "blood" -> bloodRepo.save(event.userId(), (BloodCountPayload) event.payload());
-                case "electrolyte" -> electrolyteRepo.save(event.userId(), (ElectrolytePayload) event.payload());
-                case "lipid" -> lipidRepo.save(event.userId(), (LipidPayload) event.payload());
-                case "metabolic" -> metabolicRepo.save(event.userId(), (MetabolicPayload) event.payload());
-                default -> log.warn("Telemetry type no soportado para persistencia: {}", event.telemetryType());
+            switch (event.payload()) {
+                case BloodCountPayload p -> bloodRepo.save(p.userId(), p);
+                case ElectrolytePayload p -> electrolyteRepo.save(p.userId(), p);
+                case LipidPayload p -> lipidRepo.save(p.userId(), p);
+                case MetabolicPayload p -> metabolicRepo.save(p.userId(), p);
             }
         } catch (Exception e) {
-            log.error("Error persistiendo telemetría type={}, userId={}", event.telemetryType(), event.userId(), e);
+            log.error("Error persistiendo telemetría type={}, userId={}",
+                    event.telemetryType(), event.userId(), e);
         }
     }
 }

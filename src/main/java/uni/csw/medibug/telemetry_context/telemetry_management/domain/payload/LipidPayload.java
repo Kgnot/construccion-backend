@@ -10,4 +10,4 @@ public record LipidPayload(
         String totalCholesterolUnit,
         double triglycerides,
         String triglyceridesUnit
-) {}
+) implements TelemetryPayload {}

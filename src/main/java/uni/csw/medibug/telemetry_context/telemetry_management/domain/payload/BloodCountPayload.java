@@ -15,5 +15,5 @@ public record BloodCountPayload(
         String plateletsUnit,
         double iron,
         String ironUnit
-) {
+) implements TelemetryPayload {
 }

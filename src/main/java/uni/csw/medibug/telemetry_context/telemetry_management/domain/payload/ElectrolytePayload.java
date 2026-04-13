@@ -10,4 +10,4 @@ public record ElectrolytePayload(
         String sodiumUnit,
         double potassium,
         String potassiumUnit
-) {}
+) implements TelemetryPayload {}

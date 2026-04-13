@@ -1,6 +1,5 @@
 package uni.csw.medibug.telemetry_context.telemetry_management.infrastructure.configure.websocket;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;
 import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBroker;
@@ -12,24 +11,33 @@ import uni.csw.medibug.telemetry_context.telemetry_management.infrastructure.con
 @EnableWebSocketMessageBroker
 public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
-    @Autowired
-    private UserHandshakeInterceptor userInterceptor;
+    private final UserHandshakeInterceptor userInterceptor;
+
+    public WebSocketConfig(UserHandshakeInterceptor userInterceptor) {
+        this.userInterceptor = userInterceptor;
+    }
 
     @Override
     public void configureMessageBroker(MessageBrokerRegistry config) {
+        // Broker para /topic (broadcast) y /queue (punto a punto)
         config.enableSimpleBroker("/topic", "/queue");
-        // los /app son para los controllers
-        // los /users son para los usuarios especificos
+        // Prefijo para mensajes desde cliente a servidor
         config.setApplicationDestinationPrefixes("/app");
+        // /user es el prefijo para mensajes usuario-específicos
+        // Cuando usas convertAndSendToUser(), Spring automáticamente lo envía a /user/{userId}/...
+        config.setUserDestinationPrefix("/user");
     }
 
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
         registry.addEndpoint("/ws")
+                .addInterceptors(userInterceptor) // Interceptor para extraer userId del token
+                .setHandshakeHandler(new UserPrincipalHandshakeHandler()) // Asocia sesiones con Principal basado en userId
                 .setAllowedOrigins("*"); // todo, toca cambiar url frontend
         // para viejos fallback:
-        registry.addEndpoint("/ws").withSockJS();
+        registry.addEndpoint("/ws")
+                .addInterceptors(userInterceptor)
+                .setHandshakeHandler(new UserPrincipalHandshakeHandler())
+                .withSockJS();
     }
-
-    //
 }

@@ -7,6 +7,8 @@ import org.springframework.stereotype.Repository;
 import uni.csw.medibug.telemetry_context.telemetry_management.application.port.out.TimeSeriesMetabolicRepository;
 import uni.csw.medibug.telemetry_context.telemetry_management.domain.payload.MetabolicPayload;
 
+import java.util.List;
+
 @Repository
 @Slf4j
 public class InfluxDBTimeSeriesMetabolicRepository implements TimeSeriesMetabolicRepository {
@@ -19,7 +21,27 @@ public class InfluxDBTimeSeriesMetabolicRepository implements TimeSeriesMetaboli
 
     @Override
     public void save(String userId, MetabolicPayload payload) {
-        Point point = Point.measurement("metabolic_panel")
+        Point point = createPoint(userId, payload);
+        log.info("insert metabolic_panel into InfluxDBTimeSeriesMetabolicRepository");
+        influxDbClient.writePoint(point);
+    }
+
+    @Override
+    public void saveBatch(List<MetabolicPayload> payloads) {
+        if (payloads == null || payloads.isEmpty()) {
+            log.warn("payloads is empty or null, cannot save batch");
+            return;
+        }
+        List<Point> points = payloads.stream()
+                .map(payload -> createPoint(payload.userId(), payload))
+                .toList();
+        influxDbClient.writePoints(points);
+        log.info("insert batch of metabolic_panel into InfluxDB, size: {}", points.size());
+    }
+
+    // private
+    private Point createPoint(String userId, MetabolicPayload payload) {
+        return Point.measurement("metabolic_panel")
                 .setTag("userId", userId)
                 .setField("glucose", payload.glucose())
                 .setField("creatinine", payload.creatinine())
@@ -28,7 +50,6 @@ public class InfluxDBTimeSeriesMetabolicRepository implements TimeSeriesMetaboli
                 .setField("ph", payload.ph())
                 .setField("calcium", payload.calcium())
                 .setTimestamp(payload.timestamp());
-        log.info("insert metabolic_panel into InfluxDBTimeSeriesMetabolicRepository");
-        influxDbClient.writePoint(point);
+
     }
 }

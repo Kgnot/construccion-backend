@@ -2,6 +2,8 @@ package uni.csw.medibug.telemetry_context.telemetry_management.application.port.
 
 import uni.csw.medibug.telemetry_context.telemetry_management.domain.payload.BloodCountPayload;
 
+import java.util.List;
+
 public interface TimeSeriesBloodCountRepository {
 
     /*
@@ -9,4 +11,5 @@ public interface TimeSeriesBloodCountRepository {
      * */
     void save(String userId, BloodCountPayload payload);
 
+    void saveBatch(List<BloodCountPayload> payloads);
 }

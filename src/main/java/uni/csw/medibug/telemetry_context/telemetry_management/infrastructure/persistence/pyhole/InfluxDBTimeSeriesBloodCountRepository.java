@@ -7,6 +7,8 @@ import org.springframework.stereotype.Repository;
 import uni.csw.medibug.telemetry_context.telemetry_management.application.port.out.TimeSeriesBloodCountRepository;
 import uni.csw.medibug.telemetry_context.telemetry_management.domain.payload.BloodCountPayload;
 
+import java.util.List;
+
 @Repository
 @Slf4j
 public class InfluxDBTimeSeriesBloodCountRepository implements TimeSeriesBloodCountRepository {
@@ -19,15 +21,33 @@ public class InfluxDBTimeSeriesBloodCountRepository implements TimeSeriesBloodCo
 
     @Override
     public void save(String userId, BloodCountPayload payload) {
-        Point point = Point.measurement("blood_count")
-                .setTag("userId", userId) // Los Tags son indexados, ideales para filtrar por usuario
+        Point point = createPoint(userId, payload);
+        influxDbClient.writePoint(point);
+        log.info("insert blood_count into InfluxDB");
+    }
+
+    @Override
+    public void saveBatch(List<BloodCountPayload> payloads) {
+        if (payloads == null || payloads.isEmpty()) {
+            log.warn("payloads is empty or null, cannot save batch");
+            return;
+        }
+        List<Point> points = payloads.stream()
+                .map(payload -> createPoint(payload.userId(), payload))
+                .toList();
+        influxDbClient.writePoints(points);
+        log.info("insert batch of blood_count into InfluxDB, size: {}", points.size());
+    }
+
+    // privado:
+    private Point createPoint(String userId, BloodCountPayload payload) {
+        return Point.measurement("blood_count")
+                .setTag("userId", userId)
                 .setField("redBloodCells", payload.redBloodCells())
                 .setField("whiteBloodCells", payload.whiteBloodCells())
                 .setField("platelets", payload.platelets())
                 .setField("hemoglobin", payload.hemoglobin())
                 .setField("iron", payload.iron())
                 .setTimestamp(payload.timestamp());
-        log.info("insert blood_count into InfluxDBTimeSeriesBloodCountRepository");
-        influxDbClient.writePoint(point);
     }
 }

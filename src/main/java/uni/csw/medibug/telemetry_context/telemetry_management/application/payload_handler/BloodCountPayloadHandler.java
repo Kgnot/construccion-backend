@@ -5,6 +5,7 @@ import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Component;
 import uni.csw.medibug.telemetry_context.telemetry_management.application.event.TelemetryReceivedEvent;
 import uni.csw.medibug.telemetry_context.telemetry_management.domain.payload.BloodCountPayload;
+import uni.csw.medibug.telemetry_context.telemetry_management.domain.payload.type.TelemetryType;
 import uni.csw.medibug.telemetry_context.telemetry_management.infrastructure.configure.shared.MqttTopic;
 
 @Component
@@ -22,7 +23,7 @@ public class BloodCountPayloadHandler implements MqttPayloadHandler<BloodCountPa
     @Override
     public void handle(BloodCountPayload payload) {
         eventPublisher.publishEvent(new TelemetryReceivedEvent(
-                "blood",
+                TelemetryType.BLOOD,
                 payload.userId(),
                 payload.deviceId(),
                 payload.timestamp(),

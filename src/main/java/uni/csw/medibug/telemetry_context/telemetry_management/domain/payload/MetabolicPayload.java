@@ -13,4 +13,4 @@ public record MetabolicPayload(
         double uricAcid,
         double ph,
         double calcium
-) {}
+) implements TelemetryPayload {}

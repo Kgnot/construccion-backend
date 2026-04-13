@@ -3,6 +3,8 @@ package uni.csw.medibug.telemetry_context.telemetry_management.application.port.
 
 import uni.csw.medibug.telemetry_context.telemetry_management.domain.payload.ElectrolytePayload;
 
+import java.util.List;
+
 public interface TimeSeriesElectrolyteRepository {
 
     /*
@@ -10,4 +12,5 @@ public interface TimeSeriesElectrolyteRepository {
      * */
     void save(String userId, ElectrolytePayload payload);
 
+    void saveBatch(List<ElectrolytePayload> payloads);
 }

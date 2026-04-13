@@ -19,17 +19,11 @@ public class TelemetryWebSocketProjector {
     public void onAccepted(TelemetryAcceptedEvent event) {
         // generamos un topic destinatario tipo websocket
         String destination = switch (event.telemetryType()) {
-            case "blood" -> "/queue/blood";
-            case "electrolyte" -> "/queue/electrolyte";
-            case "metabolic" -> "/queue/metabolic";
-            case "lipid" -> "/queue/lipid";
-            default -> null;
+            case BLOOD -> "/queue/blood";
+            case ELECTROLYTE -> "/queue/electrolyte";
+            case METABOLIC -> "/queue/metabolic";
+            case LIPID -> "/queue/lipid";
         };
-        if (destination == null) {
-            log.warn("Telemetry type no soportado para WS : {}", event.telemetryType());
-            return;
-        }
-
         try {
             notificationService.notify(event.userId(), destination, event.payload());
         } catch (Exception e) {

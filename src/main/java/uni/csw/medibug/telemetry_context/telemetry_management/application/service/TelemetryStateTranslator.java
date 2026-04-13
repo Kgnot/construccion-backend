@@ -7,6 +7,7 @@ import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 import uni.csw.medibug.telemetry_context.telemetry_management.application.event.TelemetryAcceptedEvent;
 import uni.csw.medibug.telemetry_context.telemetry_management.application.event.TelemetryReceivedEvent;
+import uni.csw.medibug.telemetry_context.telemetry_management.domain.payload.type.TelemetryType;
 
 import java.time.Instant;
 import java.util.concurrent.ConcurrentHashMap;
@@ -27,7 +28,7 @@ public class TelemetryStateTranslator {
         // la llave para juntar el id del dispositivo y el tipo de telemetría
         StateKey key = new StateKey(event.deviceId(), event.telemetryType());
         AtomicBoolean accepted = new AtomicBoolean(false);
-        // compute nos sirve para actualizar atomicamente el valor asociado a una clave.
+        // compute nos sirve para actualizar atómicamente el valor asociado a una clave.
         lastTimestampByDeviceAndType.compute(key, (k, previousTs) -> {
             if (previousTs == null || incomingTs.isAfter(previousTs)) {
                 accepted.set(true);
@@ -52,6 +53,6 @@ public class TelemetryStateTranslator {
 
 
     // Esto es para generar una llave (ya que no generamos en los eventos)
-    private record StateKey(String deviceId, String telemetryType) {
+    private record StateKey(String deviceId, TelemetryType telemetryType) {
     }
 }
