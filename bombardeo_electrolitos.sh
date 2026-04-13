@@ -3,7 +3,7 @@
 TOPIC="sensor/electrolyte"
 USER_ID="doctor-juan"
 DEVICE_ID="sim-electrolyte-01"
-TOTAL_MENSAJES=1000
+TOTAL_MENSAJES=100
 
 echo "🔥 Iniciando bombardeo de ELECTROLITOS ($TOTAL_MENSAJES muestras)..."
 

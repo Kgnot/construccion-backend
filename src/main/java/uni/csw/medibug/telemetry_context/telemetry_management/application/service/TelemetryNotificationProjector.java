@@ -11,7 +11,7 @@ import uni.csw.medibug.telemetry_context.telemetry_management.application.event.
 @RequiredArgsConstructor
 @Slf4j
 public class TelemetryNotificationProjector {
-    // projeccion destinada a websocket
+    // projeccion destinada a websocket - quiza cambiar lugar de implementación
     private final UserNotificationService notificationService;
 
     @Async("taskExecutor")

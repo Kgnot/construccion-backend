@@ -38,12 +38,8 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
         registry.addEndpoint("/ws")
                 .addInterceptors(userInterceptor) // Interceptor para extraer userId del token
                 .setHandshakeHandler(new UserPrincipalHandshakeHandler()) // Asocia sesiones con Principal basado en userId
-                .setAllowedOrigins("*"); // todo, toca cambiar url frontend
-        // para viejos fallback:
-        registry.addEndpoint("/ws")
-                .addInterceptors(userInterceptor)
-                .setHandshakeHandler(new UserPrincipalHandshakeHandler())
-                .withSockJS();
+                .setAllowedOrigins("http://localhost:5173")
+                .withSockJS(); // todo, toca cambiar url frontend
     }
 
     /*
