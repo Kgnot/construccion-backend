@@ -3,7 +3,7 @@
 TOPIC="sensor/lipid"
 USER_ID="doctor-juan"
 DEVICE_ID="sim-lipid-01"
-TOTAL_MENSAJES=40
+TOTAL_MENSAJES=400
 
 echo "🔥 Iniciando bombardeo de LÍPIDOS ($TOTAL_MENSAJES muestras)..."
 

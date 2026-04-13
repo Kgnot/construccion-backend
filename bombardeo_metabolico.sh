@@ -3,7 +3,7 @@
 TOPIC="sensor/metabolic"
 USER_ID="doctor-juan"
 DEVICE_ID="sim-metabolic-01"
-TOTAL_MENSAJES=60
+TOTAL_MENSAJES=600
 
 echo "🔥 Iniciando bombardeo METABÓLICO ($TOTAL_MENSAJES muestras)..."
 

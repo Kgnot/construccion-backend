@@ -1,8 +1,9 @@
-package uni.csw.medibug.telemetry_context.telemetry_management.infrastructure.persistence.pyhole;
+package uni.csw.medibug.telemetry_context.telemetry_management.infrastructure.persistence.timeseries.repository;
 
 import com.influxdb.v3.client.InfluxDBClient;
 import com.influxdb.v3.client.Point;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
 import uni.csw.medibug.telemetry_context.telemetry_management.application.port.out.TimeSeriesBloodCountRepository;
 import uni.csw.medibug.telemetry_context.telemetry_management.domain.payload.BloodCountPayload;
@@ -11,6 +12,7 @@ import java.util.List;
 
 @Repository
 @Slf4j
+@Qualifier("influxDirectBloodCountRepository")
 public class InfluxDBTimeSeriesBloodCountRepository implements TimeSeriesBloodCountRepository {
 
     private final InfluxDBClient influxDbClient;

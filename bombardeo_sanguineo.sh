@@ -4,7 +4,7 @@
 TOPIC="sensor/blood"
 USER_ID="doctor-juan"
 DEVICE_ID="paciente-simulado-01"
-TOTAL_MENSAJES=80 # Cambia este número si quieres más o menos
+TOTAL_MENSAJES=8000 # Cambia este número si quieres más o menos
 
 echo "🔥 Iniciando bombardeo de $TOTAL_MENSAJES muestras de sangre para $USER_ID..."
 
