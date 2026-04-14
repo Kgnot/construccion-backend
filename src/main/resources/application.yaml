@@ -1,6 +1,10 @@
 spring:
   application:
     name: medibug
+  datasource:
+    url: ${DATABASE_POSTGRESQL_URL}
+    username: ${DATABASE_POSTGRESQL_USERNAME}
+    password: ${DATABASE_POSTGRESQL_PASSWORD}
 
 ## Telemetry
 management:
@@ -27,13 +31,14 @@ logging:
 
 ## Influx para IoT
 influxdb:
-  url: http://localhost:8181
-  token: apiv3_RJVeDcEVA-WUfTK29KX5hZ7ATx6GGLm7NzyFyQSFZDzK7Z6bjkIGCbCxh9XxwdCenbB2XKG8LVWSUoJAXe7SXw #${INFLUXDB_TOKEN}
-  database: medibug_telemetry
+  url: ${INFLUX_URL}
+  token: ${INFLUX_TOKEN}
+  database: ${INFLUX_DB}
 
-
+## MQTT
 mqtt:
   broker:
     url: tcp://localhost:1883
   client:
     id: medibug-client
+
