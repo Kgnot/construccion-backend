@@ -35,10 +35,16 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
+        // Endpoint puro WebSocket para otros origines sin el sockJS
+        registry.addEndpoint("/ws")
+                .addInterceptors(userInterceptor)
+                .setHandshakeHandler(new UserPrincipalHandshakeHandler())
+                .setAllowedOriginPatterns("*");
+
         registry.addEndpoint("/ws")
                 .addInterceptors(userInterceptor) // Interceptor para extraer userId del token
                 .setHandshakeHandler(new UserPrincipalHandshakeHandler()) // Asocia sesiones con Principal basado en userId
-                .setAllowedOrigins("http://localhost:5173")
+                .setAllowedOriginPatterns("*", "null")//http://localhost:5173
                 .withSockJS(); // todo, toca cambiar url frontend
     }
 

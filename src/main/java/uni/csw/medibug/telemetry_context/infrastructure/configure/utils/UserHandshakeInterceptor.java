@@ -25,8 +25,23 @@ public class UserHandshakeInterceptor implements HandshakeInterceptor {
                 .getQueryParams()
                 .getFirst("userId");
 
-        if (userId != null) {
-            // ponemos el dni
+    // estamos recibiendo algo como: userId: ws%3A%2F%2Flocalhost%3A8080%2Fws%3FuserId%3Ddoctor-juan asi que debemos cambiarlo y solo obtener doctor-juan
+        if (userId != null && userId.contains("%")) {
+            try {
+                userId = java.net.URLDecoder.decode(userId, "UTF-8");
+                // Si después de decodificar sigue siendo una URL, extraer el param real
+                if (userId.startsWith("ws://") || userId.startsWith("http://")) {
+                    userId = UriComponentsBuilder.fromUriString(userId)
+                            .build()
+                            .getQueryParams()
+                            .getFirst("userId");
+                }
+            } catch (Exception e) {
+                return false;
+            }
+        }
+        // solo si es null
+        if (userId != null && !userId.isEmpty()) {
             attributes.put("userId", userId);
             return true;
         }
