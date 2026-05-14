@@ -10,7 +10,7 @@ import uni.csw.medibug.telemetry_context.infrastructure.configure.shared.MqttTop
 
 @Component
 @RequiredArgsConstructor
-@MqttTopic("sensor/electrolyte")
+@MqttTopic("sensor/+/electrolyte")
 public class ElectrolytePayloadHandler implements MqttPayloadHandler<ElectrolytePayload> {
 
     private final ApplicationEventPublisher eventPublisher;

@@ -33,7 +33,11 @@ public class MqttMessageRouter {
     }
 
     public void routeMessage(String topic, Object payload) {
-        MqttPayloadHandler<?> handler = registry.get(topic);
+        MqttPayloadHandler<?> handler = registry.entrySet().stream()
+                .filter(entry -> matches(entry.getKey(),topic))
+                .map(Map.Entry::getValue)
+                .findFirst()
+                .orElse(null);
 
         if (handler == null) {
             log.error("No handler for topic {}", topic);
@@ -51,6 +55,22 @@ public class MqttMessageRouter {
             log.error("Error while routing message for topic {}", topic, e);
         }
 
+    }
+
+    private boolean matches(String pattern, String topic) {
+        String[] patternParts = pattern.split("/");
+        String[] topicParts = topic.split("/");
+
+        if (patternParts.length != topicParts.length) return false;
+
+        for (int i = 0; i < patternParts.length; i++) {
+            if (!patternParts[i].equals("+") &&
+                    !patternParts[i].equals(topicParts[i])) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     // uncheked porque ya verificamos anteriormente que era.

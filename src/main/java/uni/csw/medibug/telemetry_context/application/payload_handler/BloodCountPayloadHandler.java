@@ -10,7 +10,7 @@ import uni.csw.medibug.telemetry_context.infrastructure.configure.shared.MqttTop
 
 @Component
 @RequiredArgsConstructor
-@MqttTopic("sensor/blood")
+@MqttTopic("sensor/+/blood")
 public class BloodCountPayloadHandler implements MqttPayloadHandler<BloodCountPayload> {
 
     private final ApplicationEventPublisher eventPublisher;

@@ -10,7 +10,7 @@ import uni.csw.medibug.telemetry_context.infrastructure.configure.shared.MqttTop
 
 @Component
 @RequiredArgsConstructor
-@MqttTopic("sensor/lipid")
+@MqttTopic("sensor/+/lipid")
 public class LipidPayloadHandler implements MqttPayloadHandler<LipidPayload> {
 
     private final ApplicationEventPublisher eventPublisher;
