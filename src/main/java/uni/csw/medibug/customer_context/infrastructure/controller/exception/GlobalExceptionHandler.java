@@ -7,6 +7,7 @@ import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import uni.csw.medibug.customer_context.domain.error.BirthDayValidateError;
+import uni.csw.medibug.customer_context.domain.error.CustomerNotFoundException;
 import uni.csw.medibug.customer_context.domain.error.DocumentValidateError;
 import uni.csw.medibug.customer_context.domain.error.EmailValidateError;
 import uni.csw.medibug.customer_context.infrastructure.persistence.jpa.error.DocumentTypeNotFoundException;
@@ -39,6 +40,18 @@ public class GlobalExceptionHandler {
                 .status(HttpStatus.NOT_FOUND)
                 .body(ApiError.of(
                         "DOCUMENT_TYPE_NOT_FOUND",
+                        ex.getMessage(),
+                        List.of(ex.getMessage()),
+                        request.getRequestURI()
+                ));
+    }
+
+    @ExceptionHandler(CustomerNotFoundException.class)
+    public ResponseEntity<ApiError> handleCustomerNotFound(CustomerNotFoundException ex, HttpServletRequest request) {
+        return ResponseEntity
+                .status(HttpStatus.NOT_FOUND)
+                .body(ApiError.of(
+                        "CUSTOMER_NOT_FOUND",
                         ex.getMessage(),
                         List.of(ex.getMessage()),
                         request.getRequestURI()
