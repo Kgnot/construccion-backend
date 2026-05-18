@@ -15,4 +15,3 @@ public record CustomerResponseDTO(
         LocalDate birthDate
 ) {
 }
-
