@@ -6,7 +6,10 @@ public record SaveProductCommand(
         String serialNumber,
         String model,
         String manufacturer,
-        String status
+        String status,
+        String userId,
+        String deviceType,
+        Integer interval
 ) {
 }
 

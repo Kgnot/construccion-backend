@@ -38,7 +38,19 @@ public class ProductController {
 
     @PostMapping
     public ResponseEntity<ApiResponse<Void>> create(@RequestBody SaveProductCommand command) {
-        saveProductUseCase.execute(command);
+
+        var fullCommand = new SaveProductCommand(
+                command.name(),
+                command.description(),
+                command.serialNumber(),
+                command.model(),
+                command.manufacturer(),
+                command.status(),
+                command.userId(),
+                command.deviceType(),
+                command.interval()
+        );
+        saveProductUseCase.execute(fullCommand);
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(ApiResponse.success("Product created successfully"));
