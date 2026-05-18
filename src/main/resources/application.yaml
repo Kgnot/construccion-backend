@@ -42,3 +42,6 @@ mqtt:
   client:
     id: medibug-client
 
+## Device Management
+device-management:
+  base-url: ${DEVICE_MANAGEMENT_URL:http://localhost:8081}
