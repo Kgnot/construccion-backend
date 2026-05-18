@@ -12,7 +12,9 @@ import uni.csw.medibug.customer_context.infrastructure.persistence.jpa.error.Doc
 import uni.csw.medibug.customer_context.infrastructure.persistence.jpa.spring.SpringJpaCustomerRepositoryJpa;
 import uni.csw.medibug.customer_context.infrastructure.persistence.jpa.spring.SpringJpaDocumentTypeRepositoryJpa;
 
+import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Repository
 public class JpaCustomerRepositoryAdapter implements CustomerRepository {
@@ -65,5 +67,25 @@ public class JpaCustomerRepositoryAdapter implements CustomerRepository {
         CustomerEntity saved = springJpaCustomerRepositoryJpa.save(entity);
 
         return customerJpaMapper.toDomain(saved);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<Customer> findAll() {
+        return springJpaCustomerRepositoryJpa.findAll()
+                .stream()
+                .map(customerJpaMapper::toDomain)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    @Transactional
+    public void delete(CustomerId id) {
+        if (id == null || id.value() == null || id.value().isBlank()) {
+            return;
+        }
+
+        UUID uuid = UUID.fromString(id.value());
+        springJpaCustomerRepositoryJpa.deleteById(uuid);
     }
 }
